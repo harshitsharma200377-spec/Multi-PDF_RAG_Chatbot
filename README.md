@@ -7,13 +7,13 @@ A powerful **Retrieval-Augmented Generation (RAG)** chatbot that lets you upload
 ## 🖥️ Screenshots
 
 ### 1. Home Page
-![Home Page](screenshots/Screenshot__300_.png)
+![Home Page](screenshots/screenshot3.png)
 
 ### 2. Asking Questions About a PDF
-![Chat Demo](screenshots/Screenshot__297_.png)
+![Chat Demo](screenshots/screenshot1.png)
 
 ### 3. Detailed Answers from PDF
-![Detailed Answer](screenshots/Screenshot__299_.png)
+![Detailed Answer](screenshots/screenshot2.png)
 
 ---
 
