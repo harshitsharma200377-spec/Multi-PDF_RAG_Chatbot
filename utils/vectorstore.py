@@ -1,15 +1,14 @@
-from langchain_chroma import Chroma
+from langchain_community.vectorstores import FAISS
 from embeddings import get_embeddings
 
 def create_vectorstore(chunks):
-    return Chroma.from_documents(
-        chunks,
-        get_embeddings(),
-        persist_directory="chroma_db"
-    )
+    db = FAISS.from_documents(chunks, get_embeddings())
+    db.save_local("faiss_db")
+    return db
 
 def load_vectorstore():
-    return Chroma(
-        persist_directory="chroma_db",
-        embedding_function=get_embeddings()
+    return FAISS.load_local(
+        "faiss_db",
+        get_embeddings(),
+        allow_dangerous_deserialization=True
     )
