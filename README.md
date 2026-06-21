@@ -3,6 +3,8 @@
 A powerful **Retrieval-Augmented Generation (RAG)** chatbot that lets you upload any PDF and ask questions about it — powered by **Groq (LLaMA 3)** and **HuggingFace Embeddings**.
 
 ---
+## Live demo : https://smart-pdf-rag-chatbot-xwsz2jpturhhkrfyh2afbk.streamlit.app/
+
 
 ## 🖥️ Screenshots
 
