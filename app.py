@@ -19,7 +19,6 @@ st.set_page_config(
 )
 
 os.makedirs("data", exist_ok=True)
-os.makedirs("chroma_db", exist_ok=True)
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -32,6 +31,20 @@ if "llm" not in st.session_state:
 
 if "retriever" not in st.session_state:
     st.session_state.retriever = None
+
+# =====================================
+# Reload saved index after app restart
+# (vectorstore.py saves to "faiss_db")
+# =====================================
+if not st.session_state.rag_ready and os.path.exists("faiss_db"):
+    try:
+        db = load_vectorstore()
+        llm, retriever = create_rag_chain(db)
+        st.session_state.llm = llm
+        st.session_state.retriever = retriever
+        st.session_state.rag_ready = True
+    except Exception:
+        pass
 
 # =====================================
 # Sidebar
@@ -69,6 +82,11 @@ if process_button:
     if not uploaded_files:
         st.warning("Please upload at least one PDF.")
     else:
+        # Remove old PDFs so previous uploads don't get mixed in
+        for old in os.listdir("data"):
+            if old.endswith(".pdf"):
+                os.remove(os.path.join("data", old))
+
         for uploaded_file in uploaded_files:
             file_path = os.path.join("data", uploaded_file.name)
             with open(file_path, "wb") as f:
@@ -106,11 +124,14 @@ if user_question:
         reply = "⚠️ Please upload and process documents first!"
     else:
         with st.spinner("Thinking..."):
-            reply = ask_question(
-                st.session_state.llm,
-                st.session_state.retriever,
-                user_question
-            )
+            try:
+                reply = ask_question(
+                    st.session_state.llm,
+                    st.session_state.retriever,
+                    user_question
+                )
+            except Exception as e:
+                reply = f"❌ Model error: {e}\n\nCheck that your model/provider in `.env` is running and reachable."
 
     st.session_state.messages.append({"role": "assistant", "content": reply})
     with st.chat_message("assistant"):
