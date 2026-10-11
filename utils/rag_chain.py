@@ -8,7 +8,7 @@ load_dotenv()
 def create_rag_chain(vectorstore):
     llm = ChatGroq(
         api_key=os.getenv("GROQ_API_KEY"),
-        model_name="llama-3.1-8b-instant"
+        model_name="openai/gpt-oss-20b"
     )
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
     return llm, retriever
